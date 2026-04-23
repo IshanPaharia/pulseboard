@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: pulseboard
+      POSTGRES_USER: pulse
+      POSTGRES_PASSWORD: pulse
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env
+    ports:
+      - "3001:3001"
+    working_dir: /app/apps/api
+    command: npx ts-node-dev --respawn --transpile-only src/index.ts
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - "3000:3000"
+    working_dir: /app/apps/web
+    command: npx next dev --hostname 0.0.0.0 --port 3000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/apps/web/.next
+
+volumes:
+  postgres_data:
