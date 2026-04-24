@@ -1,26 +1,40 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5f7ff;
+  --foreground: #0d1117;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-bg-base: #f5f7ff;
+  --color-bg-surface: #ffffff;
+  --color-bg-raised: #eef1fb;
+  --color-bg-border: #dde2f0;
+  --color-brand: #4f6ef7;
+  --color-brand-soft: #3d5ce5;
+  --color-brand-muted: #eaf0ff;
+  --color-brand-glow: rgba(79, 110, 247, 0.08);
+  --color-text-primary: #0d1117;
+  --color-text-secondary: #5a6482;
+  --color-text-muted: #9ba3be;
+  --color-success: #16a34a;
+  --color-danger: #e11d48;
+  --color-warning: #d97706;
+  --font-sans: var(--font-inter);
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  scrollbar-color: #dde2f0 transparent;
+  scrollbar-width: thin;
+}
+
+::selection {
+  background: rgba(79, 110, 247, 0.15);
 }
