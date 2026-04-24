@@ -11,6 +11,6 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts", "db/**/*.ts"],
+  "include": ["server.ts", "src/**/*.ts", "db/**/*.ts", "routes/**/*.ts", "services/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
