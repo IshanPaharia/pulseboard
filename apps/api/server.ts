@@ -7,7 +7,10 @@ import { db } from "./db/client";
 import { migrate } from "./db/migrate";
 import { collectRouter } from "./routes/collect";
 import { statsRouter } from "./routes/stats";
+import { streamRouter } from "./routes/stream";
 import { redisService } from "./services/redis";
+import { sseManager } from "./services/sse";
+import { closeSubscriber } from "./services/subscriber";
 
 dotenv.config();
 
@@ -36,6 +39,11 @@ app.get("/health", async (_req, res, next) => {
 
 app.use("/collect", collectLimiter, collectRouter);
 app.use("/api/stats", statsRouter);
+app.use("/api/stream", streamRouter);
+
+app.get("/api/debug/connections", (_req, res) => {
+  res.json(sseManager.getConnectionCount());
+});
 
 const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   console.error("Unhandled API error", error);
@@ -52,6 +60,7 @@ async function start(): Promise<void> {
     });
   } catch (error) {
     console.error("PulseBoard API startup aborted because migrations failed", error);
+    await closeSubscriber();
     await redisService.quit();
     await db.end();
     process.exit(1);
@@ -59,6 +68,7 @@ async function start(): Promise<void> {
 }
 
 process.on("SIGINT", async () => {
+  await closeSubscriber();
   await redisService.quit();
   await db.end();
   process.exit(0);

@@ -24,6 +24,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Local Redis persistence
+dump.rdb
+appendonlydir/
+
 # Editor and OS files
 .DS_Store
 Thumbs.db
