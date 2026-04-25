@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import { db } from "./db/client";
 import { migrate } from "./db/migrate";
 import { collectRouter } from "./routes/collect";
+import { eventsRouter } from "./routes/events";
 import { sitesRouter } from "./routes/sites";
 import { statsRouter } from "./routes/stats";
 import { streamRouter } from "./routes/stream";
@@ -27,6 +28,7 @@ const collectLimiter = rateLimit({
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
+app.use(express.static("public"));
 
 app.get("/health", async (_req, res, next) => {
   try {
@@ -39,6 +41,7 @@ app.get("/health", async (_req, res, next) => {
 });
 
 app.use("/collect", collectLimiter, collectRouter);
+app.use("/events", eventsRouter);
 app.use("/api/sites", sitesRouter);
 app.use("/api/stats", statsRouter);
 app.use("/api/stream", streamRouter);

@@ -28,6 +28,12 @@ pnpm-debug.log*
 dump.rdb
 appendonlydir/
 
+# Local compose and cache files
+docker-compose.override.yml
+docker-compose.*.local.yml
+.cache/
+tmp/
+
 # Editor and OS files
 .DS_Store
 Thumbs.db
